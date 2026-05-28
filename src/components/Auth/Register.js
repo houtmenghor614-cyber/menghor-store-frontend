@@ -54,7 +54,7 @@ const Register = () => {
               <i className="fas fa-user-plus text-white text-2xl"></i>
             </div>
             <h2 className="text-2xl font-bold text-gray-900">Create Account</h2>
-            <p className="text-gray-500 mt-1">Join DYNA STORE today</p>
+            <p className="text-gray-500 mt-1">Join MENGHOR STORE today</p>
           </div>
           
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -2,14 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getOrderDetail } from '../../services/orderService';
 import { initiatePayment, verifyPayment } from '../../services/paymentService';
+import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const OrderDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [checkingPayment, setCheckingPayment] = useState(false);
+  const [paymentDetected, setPaymentDetected] = useState(false);
 
   const BASE_URL = 'http://127.0.0.1:8000';
 
@@ -17,6 +20,9 @@ const OrderDetail = () => {
     try {
       const data = await getOrderDetail(id);
       setOrder(data);
+      if (data.status === 'paid') {
+        setPaymentDetected(true);
+      }
     } catch (error) {
       console.error('Failed to load order:', error);
       toast.error('Order not found');
@@ -47,7 +53,11 @@ const OrderDetail = () => {
       try {
         const result = await verifyPayment(order.order_number);
         if (result.verified && isMounted) {
-          toast.success('🎉 Payment detected! Your order is now confirmed!');
+          setPaymentDetected(true);
+          toast.success('🎉 Payment detected! Your order is now confirmed!', {
+            duration: 5000,
+            icon: '✅'
+          });
           await loadOrder();
         }
       } catch (error) {
@@ -68,8 +78,11 @@ const OrderDetail = () => {
     try {
       const response = await initiatePayment(order.id);
       if (response.payment_url) {
-        window.open(response.payment_url, '_blank');
-        toast.success('Payment page opened! It will be detected automatically.');
+        const paymentWindow = window.open(response.payment_url, '_blank');
+        toast.success('Payment page opened! Complete payment - it will be detected automatically.', {
+          duration: 5000
+        });
+        if (paymentWindow) paymentWindow.focus();
       } else {
         toast.error('No payment URL received');
       }
@@ -148,7 +161,12 @@ const OrderDetail = () => {
             <div>
               <h1 className="text-2xl font-bold">Order #{order.order_number}</h1>
               <p className="text-gray-600 mt-1">
-                Placed on {new Date(order.created_at).toLocaleDateString()}
+                Placed on {new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString()}
+              </p>
+              {/* Show User Name */}
+              <p className="text-gray-600 mt-1 flex items-center gap-2">
+                <i className="fas fa-user text-indigo-500"></i>
+                <span>Customer: <strong className="text-gray-800">{user?.full_name || 'Guest User'}</strong></span>
               </p>
             </div>
             <div className="mt-3 md:mt-0">
@@ -206,6 +224,13 @@ const OrderDetail = () => {
             </div>
           </div>
           
+          {order.payment_transaction_id && (
+            <div className="border-t mt-6 pt-6">
+              <p className="text-gray-600 mb-1">Transaction ID:</p>
+              <p className="font-mono text-sm bg-gray-100 p-2 rounded">{order.payment_transaction_id}</p>
+            </div>
+          )}
+          
           {order.status === 'pending' && (
             <div className="border-t mt-6 pt-6">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
@@ -246,7 +271,7 @@ const OrderDetail = () => {
                 </button>
               </div>
               <p className="text-xs text-gray-500 text-center mt-4">
-                Auto-check runs every 3 seconds. Your order will update automatically.
+                Auto-check runs every 3 seconds. Your order will update automatically when payment is complete.
               </p>
             </div>
           )}
@@ -261,6 +286,38 @@ const OrderDetail = () => {
                   <div>
                     <p className="font-semibold text-green-800">Payment Confirmed!</p>
                     <p className="text-sm text-green-600">Your order is being processed.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {order.status === 'shipped' && (
+            <div className="border-t mt-6 pt-6">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <i className="fas fa-truck text-white text-lg"></i>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-blue-800">Order Shipped!</p>
+                    <p className="text-sm text-blue-600">Your order is on the way!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {order.status === 'delivered' && (
+            <div className="border-t mt-6 pt-6">
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center">
+                    <i className="fas fa-gift text-white text-lg"></i>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-purple-800">Order Delivered!</p>
+                    <p className="text-sm text-purple-600">Thank you for shopping with us!</p>
                   </div>
                 </div>
               </div>

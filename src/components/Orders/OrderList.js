@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserOrders } from '../../services/orderService';
+import { useAuth } from '../../context/AuthContext';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   const loadOrders = useCallback(async () => {
     try {
@@ -81,7 +83,12 @@ const OrderList = () => {
               <div className="flex flex-col md:flex-row justify-between mb-4">
                 <div>
                   <p className="text-sm text-gray-600">Order #{order.order_number}</p>
-                  <p className="text-sm text-gray-600">
+                  {/* User Name added here */}
+                  <p className="text-sm text-indigo-600 font-medium mt-1 flex items-center gap-1">
+                    <i className="fas fa-user text-xs"></i>
+                    {user?.full_name || 'Customer'}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1">
                     {new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString()}
                   </p>
                 </div>

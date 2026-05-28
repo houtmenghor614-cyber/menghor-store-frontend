@@ -12,7 +12,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center">
                 <i className="fas fa-store text-white text-sm"></i>
               </div>
-              <span className="text-xl font-bold">DYNA STORE</span>
+              <span className="text-xl font-bold">MENGHOR STORE</span>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed">
               Your premier destination for premium fashion and accessories.

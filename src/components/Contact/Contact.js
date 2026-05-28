@@ -75,8 +75,8 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-800">Email Us</h3>
-                    <p className="text-gray-600 text-sm">support@dynastore.com</p>
-                    <p className="text-gray-600 text-sm">sales@dynastore.com</p>
+                    <p className="text-gray-600 text-sm">support@menghorstore.com</p>
+                    <p className="text-gray-600 text-sm">sales@menghorstore.com</p>
                   </div>
                 </div>
                 

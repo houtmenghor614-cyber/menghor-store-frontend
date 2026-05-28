@@ -7,7 +7,7 @@ const About = () => {
       <div className="container mx-auto px-4">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About DYNA STORE</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">About Menghor Store</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Your premier destination for premium fashion and accessories
           </p>
@@ -19,7 +19,7 @@ const About = () => {
             <div className="p-8 lg:p-12">
               <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Story</h2>
               <p className="text-gray-600 leading-relaxed mb-4">
-                Founded in 2024, DYNA STORE was born from a passion for fashion and a desire to bring 
+                Founded in 2026, Menghor STORE was born from a passion for fashion and a desire to bring 
                 the latest trends to fashion-forward individuals across Cambodia.
               </p>
               <p className="text-gray-600 leading-relaxed mb-4">
@@ -28,7 +28,7 @@ const About = () => {
                 ensure every piece meets our standards for style, quality, and value.
               </p>
               <p className="text-gray-600 leading-relaxed">
-                Today, DYNA STORE serves thousands of satisfied customers, offering a seamless 
+                Today, Menghor STORE serves thousands of satisfied customers, offering a seamless 
                 shopping experience with fast delivery and exceptional customer service.
               </p>
             </div>

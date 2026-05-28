@@ -29,3 +29,5 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 "@ | Out-File -FilePath .gitignore -Encoding utf8
+.vercel
+.env*
